@@ -98,7 +98,6 @@ namespace QLCHNH
                 quyen.manhanvien = MaNV;
                 quyen.quyentruycap = Quyen;  
                 
-
                 this.Hide();
                 Form1 f = new Form1();
                 f.Show();
