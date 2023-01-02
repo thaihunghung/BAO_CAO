@@ -9,14 +9,10 @@ using System.Windows.Forms;
 using System.Drawing;
 
 namespace QLCHNH
-{
-    public class ketnoiNV
-    {
-        public SqlConnection con = new SqlConnection("Data Source=DESKTOP-F5L768B\\SQLEXPRESS01;Initial Catalog=hung-sang;Integrated Security=True");
-    }
+{  
     internal class classketnoi
     {
-        SqlConnection ketnoi;
+        public SqlConnection ketnoi;
         public SqlCommand lenh;
         public SqlDataAdapter bodocdulieu;
         public SqlDataReader reader;
@@ -24,8 +20,17 @@ namespace QLCHNH
         public classketnoi()
         {
             ketnoi = new SqlConnection();
-            string sql = "Data Source=DESKTOP-F5L768B\\SQLEXPRESS01;Initial Catalog=hung-sang;Integrated Security=True";
-            ketnoi.ConnectionString = sql;
+            
+            
+            string sqlhung = "Data Source=DESKTOP-F5L768B\\SQLEXPRESS01;Initial Catalog=hung-sang;Integrated Security=True";
+
+            ketnoi.ConnectionString = sqlhung;
+
+            /*
+             string sqlsang = "";
+
+            ketnoi.ConnectionString = sqlsang;
+             */
 
         }
         public void KetNoi()
@@ -86,6 +91,25 @@ namespace QLCHNH
             return ds.Tables[0];           
         }
 
+        
+
+        public bool CheckKey(string sql)
+        {
+            SqlDataAdapter hungadap = new SqlDataAdapter(sql,ketnoi);
+            DataTable hung = new DataTable();
+            hungadap.Fill(hung);
+            
+            if (hung.Rows.Count > 0)
+            
+                return true;
+            
+            else
+            
+                
+                return false;              
+            
+        }
+
         public string CreateKey(string tiento)
         {
             string key = tiento;
@@ -106,10 +130,10 @@ namespace QLCHNH
             partsTime[2] = partsTime[2].Remove(2, 3);
             string t;
             t = String.Format("_{0}{1}{2}", partsTime[0], partsTime[1], partsTime[2]);
-            key = key + t;
+            key = key + "_" + t;
             return key;
         }
-        
+
         public string ConvertTimeTo24(string gio)
         {
             string h = "";
@@ -128,7 +152,7 @@ namespace QLCHNH
                     h = "16";
                     break;
                 case "5":
-                    
+
                     h = "17";
                     break;
                 case "6":
@@ -157,24 +181,6 @@ namespace QLCHNH
             }
             return h;
         }
-
-        public bool CheckKey(string sql)
-        {
-            SqlDataAdapter hungadap = new SqlDataAdapter(sql,ketnoi);
-            DataTable hung = new DataTable();
-            hungadap.Fill(hung);
-            
-            if (hung.Rows.Count > 0)
-            
-                return true;
-            
-            else
-            
-                
-                return false;              
-            
-        }
-     
         public string ConvertDateTime(string date)
         {
             string[] elements = date.Split('/');

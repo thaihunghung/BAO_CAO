@@ -199,6 +199,7 @@
             this.tbmanuochoa.Name = "tbmanuochoa";
             this.tbmanuochoa.Size = new System.Drawing.Size(158, 22);
             this.tbmanuochoa.TabIndex = 27;
+            this.tbmanuochoa.TextChanged += new System.EventHandler(this.tbmanuochoa_TextChanged);
             // 
             // label16
             // 
@@ -380,7 +381,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(29, 26);
+            this.label13.Location = new System.Drawing.Point(180, 23);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(247, 19);
             this.label13.TabIndex = 21;
@@ -390,11 +391,11 @@
             // 
             this.hienthincc.AutoSize = true;
             this.hienthincc.ForeColor = System.Drawing.Color.Red;
-            this.hienthincc.Location = new System.Drawing.Point(45, 71);
+            this.hienthincc.Location = new System.Drawing.Point(30, 104);
             this.hienthincc.Name = "hienthincc";
-            this.hienthincc.Size = new System.Drawing.Size(28, 15);
+            this.hienthincc.Size = new System.Drawing.Size(94, 15);
             this.hienthincc.TabIndex = 20;
-            this.hienthincc.Text = "hhh";
+            this.hienthincc.Text = "Nhà Cung Cấp : ";
             // 
             // tbtongtien
             // 

@@ -18,10 +18,10 @@ namespace QLCHNH
         }
         classketnoi kn = new classketnoi();
         DataTable dt = new DataTable();
-
+        string sql;
         private void dgvNhap_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            string MaHangxoa, sql;
+            string MaHangxoa;
             Double ThanhTienxoa, SoLuongxoa, sl, slcon, tong, tongmoi;
             if (dt.Rows.Count == 0)
             {
@@ -36,8 +36,6 @@ namespace QLCHNH
                 ThanhTienxoa = Convert.ToDouble(dgvNhap.CurrentRow.Cells["THANHTIENNHAP"].Value.ToString());
                 sql = "DELETE CHITIETNHAP WHERE MAPHIEUNHAP='" + tbMAPHIEUNHAP.Text + "' AND MANUOCHOA = N'" + MaHangxoa + "'";
                 kn.thaotaclenh(sql);
-
-
                 if (kn.GetValues("SELECT GIABANDEXUAT FROM NUOCHOA WHERE MANUOCHOA = '" + MaHangxoa + "'") == "0")
                 {
                     sql = "DELETE CHITIETNHAP WHERE MANUOCHOA='" + MaHangxoa + "'";
@@ -61,9 +59,9 @@ namespace QLCHNH
 
 
 
-                tong = Convert.ToDouble(kn.GetValues("SELECT TONGTIENNHAP FROM PHIEUNHAP WHERE MAPHIEUNHAP='" + tbMAPHIEUNHAP.Text + "'"));
+                tong = Convert.ToDouble(kn.GetValues("SELECT TONGTIEN FROM PHIEUNHAP WHERE MAPHIEUNHAP='" + tbMAPHIEUNHAP.Text + "'"));
                 tongmoi = tong - ThanhTienxoa;
-                sql = "UPDATE PHIEUNHAP SET TONGTIENNHAP =" + tongmoi + " WHERE MAPHIEUNHAP='" + tbMAPHIEUNHAP.Text + "'";
+                sql = "UPDATE PHIEUNHAP SET TONGTIEN =" + tongmoi + " WHERE MAPHIEUNHAP='" + tbMAPHIEUNHAP.Text + "'";
                 kn.thaotaclenh(sql);
                 tbtongtien.Text = tongmoi.ToString();
                 //lblBangChu.Text = "Bằng chữ: " + Functions.ChuyenSoSangChu(tongmoi.ToString());
@@ -78,13 +76,16 @@ namespace QLCHNH
 
             dt = kn.load_du_lieu(sql);
             dgvNhap.DataSource = dt;
+            dgvNhap.Columns[0].HeaderText = "Mã Nước Hoa";
+            dgvNhap.Columns[1].HeaderText = "Tên Nước Hoa";
+            dgvNhap.Columns[2].HeaderText = "Số Lượng";
+            dgvNhap.Columns[3].HeaderText = "Chiết Khấu";
+            dgvNhap.Columns[4].HeaderText = "Đơn Giá";
+            dgvNhap.Columns[5].HeaderText = "Thành Tiền";
+            dgvNhap.AllowUserToAddRows = false;
+            dgvNhap.EditMode = DataGridViewEditMode.EditProgrammatically;
         }
-        private void loadnuochoaCoMaTrung()
-        {
-            cbloainuochoa.SelectedValue = kn.GetValues("select MALOAI FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'");
-            cbthuonghieu.SelectedValue = kn.GetValues("select MATHUONGHIEU FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'");
-            tbdungtich.Text = kn.GetValues("select DUNGTICH FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'");
-        }
+      
         private void resetdulieu()
         {
             cbloainuochoa.SelectedIndex = -1;
@@ -98,10 +99,18 @@ namespace QLCHNH
             cbnhanvien.SelectedItem = -1;
             cbnhacc.SelectedIndex = -1;
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void loadnuochoaCoMaTrung()
         {
             string sql;
+            sql = "select MALOAI FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'";
+            cbloainuochoa.SelectedValue = kn.GetValues(sql);
+            cbthuonghieu.SelectedValue = kn.GetValues("select MATHUONGHIEU FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'");
+            tbdungtich.Text = kn.GetValues("select DUNGTICH FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'");
+            tbtensp.Text = kn.GetValues("select TENNUOCHOA FROM NUOCHOA WHERE MANUOCHOA = '" + tbmanuochoa.Text + "'");
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string sql;string ma = tbmanuochoa.Text;
             double tong, tongmoi;
             sql = "select MAPHIEUNHAP FROM PHIEUNHAP WHERE MAPHIEUNHAP ='" + tbMAPHIEUNHAP.Text + "'";
             if (!kn.CheckKey(sql))
@@ -122,51 +131,46 @@ namespace QLCHNH
                 /// kiem tra ma hang trong text bot ma hang moi
                 kn.thaotaclenh(sql);
             }
-            string ma = tbmanuochoa.Text.Trim();
             sql = "select  * from NUOCHOA WHERE MANUOCHOA = '" + ma + "'";
             if (!kn.CheckKey(sql))
-            {
-                if (cbloainuochoa.Text == "")
-                {
-                    MessageBox.Show("ban can nhap loai cho nuoc hoa moi");
-                    cbloainuochoa.Focus();
-                    return;
-                }
-                if (cbthuonghieu.Text == "")
-                {
-                    MessageBox.Show("ban can nhap thuong hieu cho nuoc hoa moi");
-                    cbthuonghieu.Focus();
-                    return;
-                }
-                if (tbtensp.Text == "")
-                {
-                    MessageBox.Show("ban can nhap ten cho nuoc hoa moi");
-                    tbtensp.Focus();
-                    return;
-                }
-                if (tbdungtich.Text == "")
-                {
-                    MessageBox.Show("ban can nhap dung tich cho nuoc hoa moi");
-                    tbdungtich.Focus();
-                    return;
-                }
+                  
+                    {
+                        if (cbloainuochoa.Text == "")
+                        {
+                            MessageBox.Show("ban can nhap loai cho nuoc hoa moi");
+                            cbloainuochoa.Focus();
+                            return;
+                        }
+                        if (cbthuonghieu.Text == "")
+                        {
+                            MessageBox.Show("ban can nhap thuong hieu cho nuoc hoa moi");
+                            cbthuonghieu.Focus();
+                            return;
+                        }
+                        if (tbtensp.Text == "")
+                        {
+                            MessageBox.Show("ban can nhap ten cho nuoc hoa moi");
+                            tbtensp.Focus();
+                            return;
+                        }
+                        if (tbdungtich.Text == "")
+                        {
+                            MessageBox.Show("ban can nhap dung tich cho nuoc hoa moi");
+                            tbdungtich.Focus();
+                            return;
+                        }
 
 
-                sql = "insert into NUOCHOA (MANUOCHOA,MALOAI,MATHUONGHIEU,TENNUOCHOA,SOLUONGTON,GIABANDEXUAT,DUNGTICH) VALUES ('" + tbmanuochoa.Text + "','" + cbloainuochoa.SelectedValue + "','" + cbthuonghieu.SelectedValue + "','" + tbtensp.Text + "',0,0,'" + tbdungtich.Text + "')";
-                kn.thaotaclenh(sql);
-            }
-            else
-            {
-                MessageBox.Show("tien hanh load du lieu da co trong may");
-                loadnuochoaCoMaTrung();
-                // neu ma trung thi ta load du lieu cua cai ma cu len
-                // getvalues ;
-                // update du lieu vao soluong
-            }
+                        sql = "insert into NUOCHOA (MANUOCHOA,MALOAI,MATHUONGHIEU,TENNUOCHOA,SOLUONGTON,GIABANDEXUAT,DUNGTICH) VALUES ('" + tbmanuochoa.Text + "','" + cbloainuochoa.SelectedValue + "','" + cbthuonghieu.SelectedValue + "','" + tbtensp.Text + "',0,0,'" + tbdungtich.Text + "')";
+                        kn.thaotaclenh(sql);
+              }
+
+
+            // neu ma trung thi ta load du lieu cua cai ma cu len
+            // getvalues ;
+            // update du lieu vao soluong
+
             //////
-
-
-
 
             if (tbsoluongnhap.Text == "")
             {
@@ -190,7 +194,7 @@ namespace QLCHNH
                 tbsoluongnhap.Focus();
                 return;
             }
-            sql = "insert into CHITIETNHAP(MAPHIEUNHAP,MANUOCHOA,MACHIETKHAU,SLNUOCHOANHAP,DONGIANHAP,THANHTIENNHAP) values('" + tbMAPHIEUNHAP.Text + "','" + tbmanuochoa.Text + "','" + cbchietkhau.SelectedValue + "','" + tbsoluongnhap.Text + "','" + tbgianhap.Text + "','" + tbthanhtien.Text + "')";
+            sql = "insert into CHITIETNHAP(MAPHIEUNHAP,MANUOCHOA,MACHIETKHAU,SLNUOCHOANHAP,DONGIANHAP,THANHTIEN) values('" + tbMAPHIEUNHAP.Text + "','" + tbmanuochoa.Text + "','" + cbchietkhau.SelectedValue + "','" + tbsoluongnhap.Text + "','" + tbgianhap.Text + "','" + tbthanhtien.Text + "')";
 
             kn.thaotaclenh(sql);
             hietthiGridview();
@@ -201,10 +205,10 @@ namespace QLCHNH
             sql = "update NUOCHOA SET SOLUONGTON =" + slcon + " where MANUOCHOA ='" + tbmanuochoa.Text.Trim() + "'";
             kn.thaotaclenh(sql);
 
-            tong = Convert.ToDouble(kn.GetValues("select TONGTIENNHAP FROM PHIEUNHAP WHERE MAPHIEUNHAP ='" + tbMAPHIEUNHAP.Text + "'"));
+            tong = Convert.ToDouble(kn.GetValues("select TONGTIEN FROM PHIEUNHAP WHERE MAPHIEUNHAP ='" + tbMAPHIEUNHAP.Text + "'"));
             tongmoi = tong + Convert.ToDouble(tbthanhtien.Text);
 
-            sql = "update PHIEUNHAP SET TONGTIENNHAP =" + tongmoi + "where MAPHIEUNHAP ='" + tbMAPHIEUNHAP.Text + "'";
+            sql = "update PHIEUNHAP SET TONGTIEN =" + tongmoi + "where MAPHIEUNHAP ='" + tbMAPHIEUNHAP.Text + "'";
 
             kn.thaotaclenh(sql);
             tbtongtien.Text = tongmoi.ToString();
@@ -216,11 +220,18 @@ namespace QLCHNH
         private void themmoi_Click(object sender, EventArgs e)
         {
             button1.Enabled = true;
-            tbMAPHIEUNHAP.Text = kn.CreateKey("NH_");
+            hienthincc.Text = "Nhà Cung Cấp : " + cbnhacc.Text;
             themmoi.Enabled = false;
             resetdulieu();
             hietthiGridview();
+            
+            
+
+
+            
+            tbMAPHIEUNHAP.Text = kn.CreateKey("HS");
         }
+           
 
         private void NHAPHANG_Load(object sender, EventArgs e)
         {
@@ -296,6 +307,16 @@ namespace QLCHNH
 
                 hietthiGridview();
             }
+        }
+
+        private void tbmanuochoa_TextChanged(object sender, EventArgs e)
+        {
+            string ma = tbmanuochoa.Text;
+
+            sql = "select  * from NUOCHOA WHERE MANUOCHOA = '" + ma + "'";
+            if (kn.CheckKey(sql))
+                loadnuochoaCoMaTrung();
+          
         }
     }
 }

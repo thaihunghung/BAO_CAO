@@ -46,5 +46,11 @@ namespace QLCHNH
             NHAPHANG hang= new NHAPHANG();
             hang.Show();
         }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            ThongKe tk = new ThongKe();
+            tk.Show();
+        }
     }
 }

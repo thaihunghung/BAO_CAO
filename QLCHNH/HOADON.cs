@@ -49,7 +49,7 @@ namespace QLCHNH
             cbkhachhang.SelectedIndex = -1;
             ketnoi.FILLComboBox("select MANVIEN , HOTEN from NHANVIEN", cbnhanvien, "MANVIEN", "MANVIEN");
             cbnhanvien.SelectedIndex = -1;
-            ketnoi.FILLComboBox("select MANUOCHOA,TENNUOCHOA FROM NUOCHOA", cbmanuochoa, "MANUOCHOA", "TENNUOCHOA");
+            ketnoi.FILLComboBox("select MANUOCHOA,TENNUOCHOA FROM NUOCHOA WHERE GIABANDEXUAT >0", cbmanuochoa, "MANUOCHOA", "TENNUOCHOA");
             cbmanuochoa.SelectedIndex = -1;
             if (tbma.Text != "")
             {
